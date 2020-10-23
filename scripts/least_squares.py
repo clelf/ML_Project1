@@ -1,5 +1,5 @@
 import numpy as np
-from costs import compute_mse
+from costs import compute_rmse
 
 #Least squares regression using normal equations
 def least_squares(y, tx):
@@ -9,6 +9,6 @@ def least_squares(y, tx):
     B=np.transpose(tx).dot(y)
     w = np.linalg.solve(A,B)
     
-    loss = compute_mse(y,tx,w)
+    loss = compute_rmse(y,tx,w)
     
     return w, loss

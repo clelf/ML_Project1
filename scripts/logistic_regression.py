@@ -13,7 +13,6 @@ def calculate_loss_log(y, tx, w):
 
 def sigmoid(t):
     """apply sigmoid function on t."""
-    print(np.exp(-t))
     sigmoid = 1./(1. + np.exp(-t))
     return sigmoid
 
@@ -22,11 +21,11 @@ def logistic_regression(y, tx, initial_w, max_iters, gamma):
     ws = [initial_w]
     losses = []
     w = initial_w
-    
+    print(tx.shape)
     for n_iter in range(max_iters):
-        gradient = compute_gradient_log(y, tx, ws[n_iter])
-        w = ws[n_iter]-gamma*gradient
+        gradient = compute_gradient_log(y, tx, w)
         loss = calculate_loss_log(y,tx,w)
+        w = w-gamma*gradient
         # store w and loss
         ws.append(w)
         losses.append(loss)

@@ -6,8 +6,9 @@ from proj1_helpers import batch_iter
 from ridge_regression import *
 from build_polynomial import build_poly
 from least_squares import *
+from logistic_regression import *
 
-def gamma_tuning_SGD(tx, y, initial_w, max_iters, batch_size):
+def gamma_tuning_SGD(y, tx, initial_w, max_iters, batch_size):
     #Compute weights and loss for each gamma
     losses = []
     # Values above range 10^-5 make the algorithm diverge
@@ -18,9 +19,34 @@ def gamma_tuning_SGD(tx, y, initial_w, max_iters, batch_size):
     gamma_opt = gammas[np.argwhere(losses == min(losses))] # returns an array
     return gamma_opt.item() #returns a scalar
 
+def gamma_tuning_GD(y, tx, initial_w, max_iters):
+    #Compute weights and loss for each gamma
+    losses = []
+    # Values above range 10^-5 make the algorithm diverge
+    gammas = np.logspace(-10, -5, 15)
+    for gamma in gammas:
+        _, loss = least_squares_GD(y,tx,initial_w, max_iters,gamma)
+        losses.append(loss)
+    gamma_opt = gammas[np.argwhere(losses == min(losses))] # returns an array
+    return gamma_opt.item() #returns a scalar
+
+def gamma_tuning_log(y, tx, initial_w, max_iters):
+    #Compute weights and loss for each gamma
+    losses = []
+    # Values above range 10^-5 make the algorithm diverge
+    gammas = np.logspace(-10, -5, 15)
+    
+    for gamma in gammas:
+        _, loss = logistic_regression(y,tx,initial_w, max_iters,gamma)
+        losses.append(loss)
+    gamma_opt = gammas[np.argwhere(losses == min(losses))] # returns an array
+    print(gamma_opt)
+    return gamma_opt.item() #returns a scalar
+
+
 
 def degree_tuning_LS(y,tx):
-    degrees = np.linspace(1, 5, 5, dtype=int)
+    degrees = np.linspace(1, 10, 10, dtype=int)
     losses=[]
     
     for degree in degrees:

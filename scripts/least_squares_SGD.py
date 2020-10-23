@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """Stochastic Gradient Descent"""
 from proj1_helpers import batch_iter
-from costs import compute_mse
+from costs import compute_rmse
 
 def compute_stoch_gradient(y, tx, w):
     #here tx and y have already been minibatched
@@ -19,7 +19,7 @@ def least_squares_SGD(y, tx, initial_w, batch_size, max_iters, gamma):
         for minibatch_y, minibatch_tx in batch_iter(y, tx, batch_size):
             grad  = compute_stoch_gradient(minibatch_y, minibatch_tx, w)
             w = w-gamma*grad
-            loss=compute_mse(y, tx, w)
+            loss=compute_rmse(y, tx, w)
             # store w and loss
             ws.append(w)
             losses.append(loss)

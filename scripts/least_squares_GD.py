@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """Gradient Descent"""
-from costs import compute_mse
+from costs import compute_rmse
+
 
 def compute_gradient(y, tx, w):
     """Compute the gradient."""
@@ -18,7 +19,7 @@ def least_squares_GD(y, tx, initial_w, max_iters, gamma):
     w = initial_w
     for n_iter in range(max_iters):
         grad = compute_gradient(y, tx, w)
-        loss = compute_mse(y, tx, w)
+        loss = compute_rmse(y, tx, w)
         w = w-gamma*grad
 
         # store w and loss
