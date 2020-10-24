@@ -1,19 +1,11 @@
 import numpy as np
+#### Replaces NaN's with imported 
 
-def clean_nan(tx_, feature):
+def clean_nan(tx_, replacement):
     tx = tx_.copy()
-    for i in range(tx.shape[1]):
-        if (i!=22):
-            tx[np.argwhere(np.isnan(tx)),i] = feature[i]
+    for j in range(tx.shape[1]):
+        if (j!=22):
+            tx[:,j] = np.nan_to_num(tx[:,j], nan=replacement[j])
             
-
-    #tx_ = np.where(tx == nan, np.ma.array(tX, mask= (tX == nan)).mean(axis=0), tx)
-    
-    '''
-    for i in range(tx.shape[0]):
-        for j in range(tx.shape[1]):
-            if (np.isnan(tx[i, j])): 
-                tx[i, j] = feature[j]
-    '''
-
     return tx
+
