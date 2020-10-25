@@ -7,6 +7,7 @@ from ridge_regression import *
 from build_polynomial import build_poly
 from least_squares import *
 from logistic_regression import *
+from reg_logistic_regression import*
 
 def gamma_tuning_SGD(y, tx, initial_w, max_iters, batch_size):
     #Compute weights and loss for each gamma
@@ -27,23 +28,32 @@ def gamma_tuning_GD(y, tx, initial_w, max_iters):
     for gamma in gammas:
         _, loss = least_squares_GD(y,tx,initial_w, max_iters,gamma)
         losses.append(loss)
-    gamma_opt = gammas[np.argwhere(losses == min(losses))] # returns an array
+    gamma_opt = gammas[np.argwhere(losses == min((losses)))] # returns an array
     return gamma_opt.item() #returns a scalar
 
-def gamma_tuning_log(y, tx, initial_w, max_iters):
+def param_tuning_log(y, tx, initial_w, max_iters, lambda_):
     #Compute weights and loss for each gamma
     losses = []
     # Values above range 10^-5 make the algorithm diverge
-    gammas = np.logspace(-10, -5, 15)
-    
+    gammas = np.logspace(-5, -2, 16)
     for gamma in gammas:
-        _, loss = logistic_regression(y,tx,initial_w, max_iters,gamma)
+        _, loss = logistic_regression(y, tx, initial_w, max_iters, gamma, lambda_)
         losses.append(loss)
     gamma_opt = gammas[np.argwhere(losses == min(losses))] # returns an array
-    print(gamma_opt)
+    gamma_opt = gamma_opt[-1]
     return gamma_opt.item() #returns a scalar
 
-
+def param_tuning_reg_log(y, tx, initial_w, max_iters, lambda_):
+    #Compute weights and loss for each gamma
+    losses = []
+    # Values above range 10^-5 make the algorithm diverge
+    gammas = np.logspace(-5, 0, 16)
+    for gamma in gammas:
+        _, loss = reg_logistic_regression(y, tx, lambda_, initial_w, max_iters, gamma)
+        losses.append(loss)
+    gamma_opt = gammas[np.argwhere(losses == min(losses))] # returns an array
+    gamma_opt = gamma_opt[-1]
+    return gamma_opt.item() #returns a scalar
 
 def degree_tuning_LS(y,tx):
     degrees = np.linspace(1, 10, 10, dtype=int)
@@ -66,5 +76,6 @@ def lambda_tuning_ridge(y, tx):
     for lambda_ in lambdas:
         _, loss = ridge_regression(y, tx, lambda_)
         losses.append(loss)
-    lambda_opt = lambdas[np.argwhere(losses == min(losses))]    
-    return lambda_opt.item()
+    lambda_opt = lambdas[np.argwhere(losses == min(losses))]  
+    lambda_=lambda_opt[-1]
+    return lambda_.item()
