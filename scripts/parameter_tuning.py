@@ -70,12 +70,17 @@ def degree_tuning_LS(y,tx):
 
 def lambda_tuning_ridge(y, tx):
     # Compute weights and loss for each gamma
+    #print(losses)
     losses = []
+    
     # Boundaries are set very low because it systematically takes the lowest boundary when lower limit is above -10
     lambdas = np.logspace(-20, -10, 25)
+    
     for lambda_ in lambdas:
         _, loss = ridge_regression(y, tx, lambda_)
         losses.append(loss)
+        #losses[i] = loss
     lambda_opt = lambdas[np.argwhere(losses == min(losses))]  
     lambda_=lambda_opt[-1]
     return lambda_.item()
+    #return lambdas, losses
