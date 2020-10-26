@@ -10,7 +10,6 @@ def compute_gradient_log(y, tx, w):
 def calculate_loss_log(y, tx, w, lambda_):
     """compute the cost by negative log likelihood."""
     a= sigmoid(tx.dot(w))
-    #loss = y.T.dot(np.log(probLabel)) + (1-y).T.dot(np.log(1-probLabel))
     loss = - (1 / tx.shape[0]) * np.sum((y * np.log(a)) + ((1 - y) * np.log(1 - a)))
     return loss + np.squeeze(w.T.dot(w))*lambda_
 
@@ -24,6 +23,8 @@ def logistic_regression(y, tx, initial_w, max_iters, gamma, lambda_):
     ws = [initial_w]
     losses = []
     w = initial_w
+    threshold = pow(10,-8)
+
     for n_iter in range(max_iters):
         gradient = compute_gradient_log(y, tx, w)
         loss = calculate_loss_log(y,tx,w, lambda_)
@@ -31,5 +32,6 @@ def logistic_regression(y, tx, initial_w, max_iters, gamma, lambda_):
         # store w and loss
         ws.append(w)
         losses.append(loss)
-        
+        if len(losses) > 1 and (np.abs(losses[-1] - losses[-2])) < threshold:
+            break
     return ws[-1], losses[-1]

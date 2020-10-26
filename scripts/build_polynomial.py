@@ -5,16 +5,17 @@ import numpy as np
 
 
 def build_poly(x, degree):
-    """polynomial basis functions for input data x, for j=0 up to j=degree."""
-    
-    '''poly = np.zeros((x.shape[0], degree+1))
-    poly[:,0]=np.ones((x.shape[0],))
-    
-    for d in range(1,degree+1): #bc it stops just before degree+1 -> last value = degree
-        poly[:,d]=x**d
-    return poly'''
     
     poly = np.ones((x.shape[0], 1))
     for d in range(1, degree+1):
         poly = np.c_[poly, np.power(x, d)]
     return poly
+
+def feature_expansion(tx_, degree, categorical_index):
+    tx_categorical = tx_[:,categorical_index]
+    
+    tx_no_categorical = np.delete(tx_, [categorical_index], 1)
+    tx_poly = build_poly(tx_no_categorical, degree)
+    
+    tx = np.c_[tx_poly, tx_categorical]
+    return tx
